@@ -23,7 +23,7 @@ class ProxyServer:
         is_allowed, reason = self.waf_engine.inspect_request(simple_request)
 
         if not is_allowed:
-            return "Forbidden: Your request was blocked by the security firewall.", 403
+            return "Forbidden: Your request was blocked.", 403
 
         try:
             backend_response = requests.request(

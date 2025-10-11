@@ -4,9 +4,9 @@ from rules.http_requests import HttpRequest
 
 
 class SQLRule(InspectionRule):
-    def __init__(self, pattern: re.Pattern, id: str):
+    def __init__(self, pattern: re.Pattern, id: str, version: int, name:str):
         self.pattern = pattern
-        super().__init__(id)
+        super().__init__(id, version, name)
 
     def check_request(self, request: HttpRequest):
         try:

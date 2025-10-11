@@ -15,7 +15,7 @@ class TestSQLRules:
                                   "user" : "' OR 1 == 1 --"
                               })
 
-        SQLi_rule_query = SQLRule(sql_patterns, test_uuid)
+        SQLi_rule_query = SQLRule(sql_patterns, test_uuid, -1, "test_not_prod")
         allowed = SQLi_rule_query.check_request(request)
         
         assert allowed == False
@@ -24,7 +24,7 @@ class TestSQLRules:
         request = HttpRequest(path="/query",
                               body="' OR 1 == 1 --")
 
-        SQLi_rule_query = SQLRule(sql_patterns, test_uuid)
+        SQLi_rule_query = SQLRule(sql_patterns, test_uuid, -1, "test_not_prod")
         allowed = SQLi_rule_query.check_request(request)
         
         assert allowed == False
@@ -36,7 +36,7 @@ class TestSQLRules:
                               })
         
 
-        SQLi_rule_query = SQLRule(sql_patterns, test_uuid)
+        SQLi_rule_query = SQLRule(sql_patterns, test_uuid, -1, "test_not_prod")
         allowed = SQLi_rule_query.check_request(request)
         
         assert allowed == True
@@ -45,7 +45,7 @@ class TestSQLRules:
         request = HttpRequest(path="/query",
                               body="add comment")
 
-        SQLi_rule_query = SQLRule(sql_patterns, test_uuid)
+        SQLi_rule_query = SQLRule(sql_patterns, test_uuid, -1, "test_not_prod")
         allowed = SQLi_rule_query.check_request(request)
         
         assert allowed == True

@@ -9,7 +9,7 @@ def create_multiple_sqlrules():
     dummy_id = 0
     for sql_pattern in sql_patterns:
         pattern = re.compile(sql_pattern)
-        rule = SQLRule(pattern, str(dummy_id))
+        rule = SQLRule(pattern, str(dummy_id), -1, "test_not_prod")
         sql_rules.append(rule)
         dummy_id += 1
     return sql_rules

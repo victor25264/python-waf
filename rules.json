@@ -1,0 +1,15 @@
+{
+    "rules": [
+        {
+            "id": "2caf8025-1ab7-4444-b152-ba904fb7eec6",
+            "name": "Common SQL patterns",
+            "version": 1,
+            "type": 0,
+            "logic": "",
+            "enable": true,
+            "metadata" : {
+
+            }
+        }
+    ]
+}
