@@ -1,6 +1,7 @@
 from rules.sql_rules import SQLRule
 from rules.rule_loader import InspectionRuleLoader
 from engine.waf_engine import WAFEngine
+from engine.waf_db import WAFDB
 from proxy.proxy import ProxyServer
 from dotenv import load_dotenv
 import os
@@ -26,7 +27,8 @@ def main():
     rule_loader = InspectionRuleLoader(rules)
     rules = rule_loader.load_rules()
 
-    engine = WAFEngine(rules, False, 4, db_con)
+    waf_db = WAFDB(db_con)
+    engine = WAFEngine(rules, False, 4, waf_db)
     proxy = ProxyServer(waf_engine=engine, backend_url=BACKEND_URL, logger=logger)
 
     proxy.run(port=LISTEN_PORT)

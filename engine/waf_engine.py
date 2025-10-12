@@ -2,6 +2,7 @@ from typing import List
 from rules.inspection_rules import InspectionRule
 from rules.http_requests import HttpRequest
 from engine.waf_log import WafLogEntry
+from engine.waf_db import WAFDB
 import threading
 import concurrent.futures
 from functools import partial
@@ -12,7 +13,7 @@ DB_TABLE = "attacks_stats"
 DB_QUERY = f"INSERT INTO {DB_TABLE} {WafLogEntry.get_all_attr_insert()} VALUES  {WafLogEntry.get_all_to_insert()}"
 
 class WAFEngine:
-    def __init__(self, rules: List[InspectionRule], fail_open : bool =True, workers:int = None, db_connnection = None):
+    def __init__(self, rules: List[InspectionRule], fail_open : bool =True, workers:int = None, waf_db:WAFDB = None):
         """
         Args:
             rules (List[InspectionRule]): A list of rule objects to be applied to requests.
@@ -26,11 +27,7 @@ class WAFEngine:
         self.fail_open = fail_open
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=workers)
         
-        self.db_connnection = db_connnection
-        if self.db_connnection:
-            self.db_cursor = db_connnection.cursor()
-        else:
-            self.db_cursor = None
+        self.waf_db = waf_db
         self.db_lock = threading.Lock()
 
     def check_rule(self, rule, request, stop_event=None):
@@ -58,12 +55,11 @@ class WAFEngine:
                 if stop_event:
                     stop_event.set()
 
-                if self.db_cursor:
+                if self.waf_db:
                     with self.db_lock:
-                        # save data if DB cursor is set
-                        values = (datetime.now().timestamp(), rule.id, rule.name, request.src_ip, request.path, request.method)
-                        self.db_cursor.execute(DB_QUERY, values)
-                        self.db_connnection.commit()
+                        # save data if DB instance is set
+                        values = WafLogEntry(datetime.now().timestamp(), rule.id, rule.name, request.src_ip, request.path, request.method)
+                        self.waf_db.insert_entry(values)
 
                 return False, str(rule)
             return True, None

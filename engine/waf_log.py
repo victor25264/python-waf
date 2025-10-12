@@ -16,7 +16,7 @@ class WafLogEntry:
         """
         Returns a tuple of attribute values suitable for SQL INSERT columns.
         """
-        return (self.timestamp, self.rule_id, self.rule_name, self.src_ip, self.req_path, self.req_method)
+        return (str(self.timestamp), self.rule_id, self.rule_name, self.src_ip, self.req_path, self.req_method)
 
     @classmethod
     def get_all_attr_insert(cls):
