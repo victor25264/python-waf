@@ -2,12 +2,14 @@ from engine.waf_engine import WAFEngine
 from rules.http_requests import HttpRequest
 from flask import Flask, request, Response
 import requests
+import logging
 
 class ProxyServer:
-    def __init__(self, waf_engine: WAFEngine, backend_url:str):
+    def __init__(self, waf_engine: WAFEngine, backend_url:str, logger: logging.Logger = None):
         self.app = Flask(__name__)
         self.waf_engine = waf_engine
         self.backend_url = backend_url
+        self.logger = logger
         self.app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])(self.proxy)
         self.app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])(self.proxy)
 
@@ -21,6 +23,9 @@ class ProxyServer:
         )
 
         is_allowed, reason = self.waf_engine.inspect_request(simple_request)
+
+        if self.logger:
+            self.logger.critical(f"Rule: {reason}")
 
         if not is_allowed:
             return "Forbidden: Your request was blocked.", 403

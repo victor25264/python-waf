@@ -7,9 +7,9 @@ from functools import partial
 
 
 class WAFEngine:
-    def __init__(self, rules: List[InspectionRule], fail_safe : bool =False, workers:int = None):
+    def __init__(self, rules: List[InspectionRule], fail_open : bool =True, workers:int = None):
         self.rules = rules
-        self.fail_safe = fail_safe
+        self.fail_open = fail_open
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=workers)
 
     def check_rule(self, rule, request, stop_event=None):
@@ -26,7 +26,7 @@ class WAFEngine:
             print(f"[Error] Exception in rule {rule}: {e}")
             if stop_event:
                 stop_event.set()
-            return False, f"Rule Error in {rule}"
+            return self.fail_open, f"Rule Error in {rule}"
 
     def inspect_request(self, request: HttpRequest):
         if not self.executor:

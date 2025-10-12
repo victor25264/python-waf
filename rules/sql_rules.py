@@ -19,3 +19,6 @@ class SQLRule(InspectionRule):
         except Exception as e:
             raise InspectionRuleException(e)
         return True
+    
+    def __str__(self) -> str:
+        return f"ID: {self.id}, NAME: {self.name}"

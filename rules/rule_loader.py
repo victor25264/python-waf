@@ -11,6 +11,8 @@ class InspectionRuleLoader:
         rules_json = json.loads(rules_str)
         rules: list[InspectionRule] = []
         for rule in rules_json["rules"]:
-            rules.append(RuleFactory.create_rule(rule))
+            rule_created = RuleFactory.create_rule(rule)
+            if rule_created:
+                rules.append(rule_created)
         return rules
         

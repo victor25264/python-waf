@@ -1,11 +1,297 @@
 {
     "rules": [
         {
-            "id": "2caf8025-1ab7-4444-b152-ba904fb7eec6",
-            "name": "Common SQL patterns",
+            "id": "1",
+            "name": "Common SQLi detected",
             "version": 1,
             "type": 0,
-            "logic": "",
+            "logic": "(\\%27)|(\\')|(\\-\\-)|(\\%23)|(#)|(\b(ALTER|CREATE|DELETE|DROP|EXEC|INSERT|MERGE|SELECT|UPDATE|UNION)\\b)",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+        {
+            "id": "942140",
+            "name": "SQL Injection Attack: Common DB Names Detected",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i)\b(?:d(?:atabas|b_nam)e[^0-9A-Z_a-z]*\\(|(?:information_schema|m(?:aster\\.\\.sysdatabases|s(?:db|ys(?:ac(?:cess(?:objects|storage|xml)|es)|modules2?|(?:object|querie|relationship)s))|ysql\\.db)|northwind|pg_(?:catalog|toast)|tempdb)\\b|s(?:chema(?:_name\\b|[^0-9A-Z_a-z]*\\()|(?:qlite_(?:temp_)?master|ys(?:aux|\\.database_name))\b))",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942151",
+            "name": "SQL Injection Attack: SQL function name detected",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i)\\b(?:a(?:dd(?:dat|tim)e|es_(?:de|en)crypt|s(?:cii(?:str)?|in)|tan2?)|b(?:enchmark|i(?:n_to_num|t_(?:and|count|length|x?or)))|c(?:har(?:acter)?_length|iel(?:ing)?|o(?:alesce|ercibility|llation|(?:mpres)?s|n(?:cat(?:_ws)?|nection_id|v(?:ert_tz)?)|t)|r32|ur(?:(?:dat|tim)e|rent_(?:date|setting|time(?:stamp)?|user)))|d(?:a(?:t(?:abase(?:_to_xml)?|e(?:_(?:add|format|sub)|diff))|y(?:name|of(?:month|week|year)))|count|e(?:code|s_(?:de|en)crypt)|ump)|e(?:n(?:c(?:ode|rypt)|ds_?with)|x(?:p(?:ort_set)?|tract(?:value)?))|f(?:i(?:el|n)d_in_set|ound_rows|rom_(?:base64|days|unixtime))|g(?:e(?:ometrycollection|t(?:_(?:format|lock)|pgusername))|(?:r(?:eates|oup_conca)|tid_subse)t)|hex(?:toraw)?|i(?:fnull|n(?:et6?_(?:aton|ntoa)|s(?:ert|tr)|terval)|s(?:_(?:(?:free|used)_lock|ipv(?:4(?:_(?:compat|mapped))?|6)|n(?:ot(?:_null)?|ull)|superuser)|null))|json(?:_(?:a(?:gg|rray(?:_(?:elements(?:_text)?|length))?)|build_(?:array|object)|e(?:ac|xtract_pat)h(?:_text)?|object(?:_(?:agg|keys))?|populate_record(?:set)?|strip_nulls|t(?:o_record(?:set)?|ypeof))|b(?:_(?:array(?:_(?:elements(?:_text)?|length))?|build_(?:array|object)|e(?:ac|xtract_pat)h(?:_text)?|insert|object(?:_(?:agg|keys))?|p(?:ath_(?:(?:exists|match)(?:_tz)?|query(?:_(?:(?:array|first)(?:_tz)?|tz))?)|opulate_record(?:set)?|retty)|s(?:et(?:_lax)?|trip_nulls)|t(?:o_record(?:set)?|ypeof)))?|path)?|l(?:ast_(?:day|inser_id)|case|east|i(?:kely|nestring)|o(?:_(?:from_bytea|put)|ad_file|ca(?:ltimestamp|te)|g(?:10|2))|pad|trim)|m(?:a(?:ke(?:_set|date)|ster_pos_wait)|d5|i(?:crosecon)?d|onthname|ulti(?:linestring|po(?:int|lygon)))|n(?:ame_const|ot_in|ullif)|o(?:ct(?:et_length)?|(?:ld_passwo)?rd)|p(?:eriod_(?:add|diff)|g_(?:client_encoding|(?:databas|read_fil)e|l(?:argeobject|s_dir)|sleep|user)|o(?:lygon|w)|rocedure_analyse)|qu(?:ery_to_xml|ote)|r(?:a(?:dians|nd|wtohex)|elease_lock|ow_(?:count|to_json)|pad|trim)|s(?:chema|e(?:c_to_time|ssion_user)|ha[12]?|in|oundex|q(?:lite_(?:compileoption_(?:get|used)|source_id)|rt)|t(?:arts_?with|d(?:dev_(?:po|sam)p)?|r(?:_to_date|cmp))|ub(?:(?:dat|tim)e|str(?:ing(?:_index)?)?)|ys(?:date|tem_user))|t(?:ime(?:_(?:format|to_sec)|diff|stamp(?:add|diff)?)|o(?:_(?:base64|jsonb?)|n?char|(?:day|second)s)|r(?:im|uncate))|u(?:case|n(?:compress(?:ed_length)?|hex|i(?:str|x_timestamp))|(?:pdatexm|se_json_nul)l|tc_(?:date|time(?:stamp)?)|uid(?:_short)?)|var(?:_(?:po|sam)p|iance)|we(?:ek(?:day|ofyear)|ight_string)|xmltype|yearweek)[^0-9A-Z_a-z]*\\(",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942160",
+            "name": "Detects blind sqli tests using sleep() or benchmark()",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i:sleep\\(\\s*?\\d*?\\s*?\\)|benchmark\\(.*?\\,.*?\\))",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942170",
+            "name": "Detects SQL benchmark and sleep injection attempts including conditional queries",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i)(?:select|;)[\\s\\x0b]+(?:benchmark|if|sleep)[\\s\\x0b]*?\\([\\s\\x0b]*?\\(?[\\s\\x0b]*?[0-9A-Z_a-z]+",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942190",
+            "name": "Detects MSSQL code execution and information gathering attempts",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i)[\"'`](?:[\\s\\x0b]*![\\s\\x0b]*[\"'0-9A-Z_-z]|;?[\\s\\x0b]*(?:having|select|union\b[\\s\\x0b]*(?:all|(?:distin|sele)ct))\b[\\s\\x0b]*[^\\s\\x0b])|\b(?:(?:(?:c(?:onnection_id|urrent_user)|database|schema|user)[\\s\\x0b]*?|select.*?[0-9A-Z_a-z]?user)\\(|exec(?:ute)?[\\s\\x0b]+master\\.|from[^0-9A-Z_a-z]+information_schema[^0-9A-Z_a-z]|into[\\s\\x0b\\+]+(?:dump|out)file[\\s\\x0b]*?[\"'`]|union(?:[\\s\\x0b]select[\\s\\x0b]@|[\\s\\x0b\\(0-9A-Z_a-z]*?select))|[\\s\\x0b]*?exec(?:ute)?.*?[^0-9A-Z_a-z]xp_cmdshell|[^0-9A-Z_a-z]iif[\\s\\x0b]*?\\(",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942220",
+            "name": "Looking for integer overflow attacks, these are taken from skipfish",
+            "version": 1,
+            "type": 0,
+            "logic": "^(?i:-0000023456|4294967295|4294967296|2147483648|2147483647|0000012345|-2147483648|-2147483649|0000023456|2.2250738585072007e-308|2.2250738585072011e-308|1e309)$",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "--",
+            "name": "---",
+            "version": 1,
+            "type": 0,
+            "logic": "---",
+            "enable": false,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942440",
+            "name": "SQL Comment Sequence Detected",
+            "version": 1,
+            "type": 0,
+            "logic": "\/\\*!?|\\*\/|[';]--|--(?:[\\s\\x0b]|[^\\-]*?-)|[^&\\-]#.*?[\\s\\x0b]|;?\\x00",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942450",
+            "name": "SQL Hex Encoding Identified",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i:\\b0x[a-f\\d]{3,})",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942510",
+            "name": "SQLi bypass attempt by ticks or backticks detected",
+            "version": 1,
+            "type": 0,
+            "logic": "(?:`(?:(?:[\\w\\s=_\\-+{}()<@]){2,29}|(?:[A-Za-z0-9+/]{4})+(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?)`)",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942520",
+            "name": "Detects basic SQL authentication bypass attempts 4.0/4",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i)[\\\"'`][\\s\\x0b]*?(?:(?:is[\\s\\x0b]+not|not[\\s\\x0b]+(?:like|glob|(?:betwee|i)n|null|regexp|match)|mod|div|sounds[\\s\\x0b]+like)\\b|[%&\\*\\+\\-/<->\\^\\|]{1,3})",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942521",
+            "name": "Detects basic SQL authentication bypass attempts 4.1/4",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i)^(?:[^']*?(?:'[^']*?'[^']*?)*?'|[^\\\"]*?(?:\\\"[^\\\"]*?\\\"[^\\\"]*?)*?\\\"|[^`]*?(?:`[^`]*?`[^`]*?)*?`)[\\s\\x0b]*([0-9A-Z_a-z]+)\\b",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942522",
+            "name": "'Detects basic SQL authentication bypass attempts 4.1/4",
+            "version": 1,
+            "type": 0,
+            "logic": "^.*?\\x5c['\\\"`](?:.*?['\\\"`])?\\s*(?:and|or)\\b",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942152",
+            "name": "SQL Injection Attack: SQL function name detected",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i)\\b(?:a(?:dd(?:dat|tim)e|es_(?:de|en)crypt|s(?:cii(?:str)?|in)|tan2?)|b(?:enchmark|i(?:n_to_num|t_(?:and|count|length|x?or)))|c(?:har(?:acter)?_length|iel(?:ing)?|o(?:alesce|ercibility|llation|(?:mpres)?s|n(?:cat(?:_ws)?|nection_id|v(?:ert(?:_tz)?)?)|t)|r32|ur(?:(?:dat|tim)e|rent_(?:date|setting|time(?:stamp)?|user)))|d(?:a(?:t(?:abase(?:_to_xml)?|e(?:_(?:add|format|sub)|diff))|y(?:name|of(?:month|week|year)))|count|e(?:code|grees|s_(?:de|en)crypt)|ump)|e(?:lt|n(?:c(?:ode|rypt)|ds_?with)|x(?:p(?:ort_set)?|tract(?:value)?))|f(?:i(?:el|n)d_in_set|ound_rows|rom_(?:base64|days|unixtime))|g(?:e(?:ometrycollection|t(?:_(?:format|lock)|pgusername))|(?:r(?:eates|oup_conca)|tid_subse)t)|hex(?:toraw)?|i(?:fnull|n(?:et6?_(?:aton|ntoa)|s(?:ert|tr)|terval)|s(?:_(?:(?:free|used)_lock|ipv(?:4(?:_(?:compat|mapped))?|6)|n(?:ot(?:_null)?|ull)|superuser)|null))|json(?:_(?:a(?:gg|rray(?:_(?:elements(?:_text)?|length))?)|build_(?:array|object)|e(?:ac|xtract_pat)h(?:_text)?|object(?:_(?:agg|keys))?|populate_record(?:set)?|strip_nulls|t(?:o_record(?:set)?|ypeof))|b(?:_(?:array(?:_(?:elements(?:_text)?|length))?|build_(?:array|object)|object(?:_(?:agg|keys))?|e(?:ac|xtract_pat)h(?:_text)?|insert|p(?:ath_(?:(?:exists|match)(?:_tz)?|query(?:_(?:(?:array|first)(?:_tz)?|tz))?)|opulate_record(?:set)?|retty)|s(?:et(?:_lax)?|trip_nulls)|t(?:o_record(?:set)?|ypeof)))?|path)?|l(?:ast_(?:day|inser_id)|case|e(?:as|f)t|i(?:kel(?:ihood|y)|nestring)|o(?:_(?:from_bytea|put)|ad_file|ca(?:ltimestamp|te)|g(?:10|2)|wer)|pad|trim)|m(?:a(?:ke(?:_set|date)|ster_pos_wait)|d5|i(?:crosecon)?d|onthname|ulti(?:linestring|po(?:int|lygon)))|n(?:ame_const|ot_in|ullif)|o(?:ct(?:et_length)?|(?:ld_passwo)?rd)|p(?:eriod_(?:add|diff)|g_(?:client_encoding|(?:databas|read_fil)e|l(?:argeobject|s_dir)|sleep|user)|o(?:(?:lyg|siti)on|w)|rocedure_analyse)|qu(?:arter|ery_to_xml|ote)|r(?:a(?:dians|nd|wtohex)|elease_lock|ow_(?:count|to_json)|pad|trim)|s(?:chema|e(?:c_to_time|ssion_user)|ha[12]?|in|oundex|pace|q(?:lite_(?:compileoption_(?:get|used)|source_id)|rt)|t(?:arts_?with|d(?:dev_(?:po|sam)p)?|r(?:_to_date|cmp))|ub(?:(?:dat|tim)e|str(?:ing(?:_index)?)?)|ys(?:date|tem_user))|t(?:ime(?:_(?:format|to_sec)|diff|stamp(?:add|diff)?)|o(?:_(?:base64|jsonb?)|n?char|(?:day|second)s)|r(?:im|uncate))|u(?:case|n(?:compress(?:ed_length)?|hex|i(?:str|x_timestamp)|likely)|(?:pdatexm|se_json_nul)l|tc_(?:date|time(?:stamp)?)|uid(?:_short)?)|var(?:_(?:po|sam)p|iance)|we(?:ek(?:day|ofyear)|ight_string)|xmltype|yearweek)[^0-9A-Z_a-z]*\\(",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942321",
+            "name": "Detects MySQL and PostgreSQL stored procedure/function injections",
+            "version": 1,
+            "type": 0,
+            "logic": "(?i)create[\\s\\x0b]+(?:function|procedure)[\\s\\x0b]*?[0-9A-Z_a-z]+[\\s\\x0b]*?\\([\\s\\x0b]*?\\)[\\s\\x0b]*?-|d(?:eclare[^0-9A-Z_a-z]+[#@][\\s\\x0b]*?[0-9A-Z_a-z]+|iv[\\s\\x0b]*?\\([\\+\\-]*[\\s\\x0b\\.0-9]+,[\\+\\-]*[\\s\\x0b\\.0-9]+\\))|exec[\\s\\x0b]*?\\([\\s\\x0b]*?@|(?:lo_(?:impor|ge)t|procedure[\\s\\x0b]+analyse)[\\s\\x0b]*?\\(|;[\\s\\x0b]*?(?:declare|open)[\\s\\x0b]+[\\-0-9A-Z_a-z]+|::(?:b(?:igint|ool)|double[\\s\\x0b]+precision|int(?:eger)?|numeric|oid|real|(?:tex|smallin)t)",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942251",
+            "name": "Detects HAVING injections",
+            "version": 1,
+            "type": 0,
+            "logic": "Detects HAVING injections",
+            "enable": true,
+            "metadata" : {
+
+            }
+        },
+         {
+            "id": "942490",
+            "name": "Detects classic SQL injection probings 3/3",
+            "version": 1,
+            "type": 0,
+            "logic": "[\\\"'`][\\s\\d]*?[^\\w\\s]\\W*?\\d\\W*?.*?[\\\"'`\\d]",
             "enable": true,
             "metadata" : {
 
