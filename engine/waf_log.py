@@ -1,5 +1,4 @@
-from dataclasses import dataclass
-
+from dataclasses import dataclass, fields
 
 @dataclass
 class WafLogEntry:
@@ -14,12 +13,26 @@ class WafLogEntry:
     req_method: str
 
     def get_all_data(self):
+        """
+        Returns a tuple of attribute values suitable for SQL INSERT columns.
+        """
         return (self.timestamp, self.rule_id, self.rule_name, self.src_ip, self.req_path, self.req_method)
 
-    @staticmethod
-    def get_all_attr_insert():
-        return ("(timestamp, rule_id, rule_name, src_ip, req_path, req_method)")
+    @classmethod
+    def get_all_attr_insert(cls):
+        """
+        Returns a string of attribute names suitable for SQL INSERT columns,
+        dynamically from dataclass fields.
+        """
+        field_names = [field.name for field in fields(cls)]
+        return f"({', '.join(field_names)})"    
     
-    @staticmethod
-    def get_all_to_insert():
-        return ("(?, ?, ?, ?, ?, ?)")
+    @classmethod
+    def get_all_to_insert(cls):
+        """
+        Returns a string of placeholders suitable for SQL INSERT values,
+        dynamically based on the number of dataclass fields.
+        """
+        num_fields = len(fields(cls))
+        placeholders = ", ".join(["?"] * num_fields)
+        return f"({placeholders})"
