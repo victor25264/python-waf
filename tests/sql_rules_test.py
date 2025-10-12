@@ -67,7 +67,7 @@ class TestSQLRules:
         
         assert str_sql_rule == expected_str
 
-# inspired from: https://stackoverflow.com/questions/23337471/how-do-i-properly-assert-that-an-exception-gets-raised-in-pytest
+    # inspired from: https://stackoverflow.com/questions/23337471/how-do-i-properly-assert-that-an-exception-gets-raised-in-pytest
     def test_rule_raise_expection(self):
         SQLi_rule_query = SQLRule(MockPattern(), test_uuid, test_version, test_name)
         request = HttpRequest(path="/query",

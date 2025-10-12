@@ -31,6 +31,35 @@ rules_str = r"""
 }
 """
 
+rules_str_void = r"""
+{
+    "rules": [
+        {
+            "id": "2caf8025-1ab7-4444-b152-ba904fb7eec6",
+            "name": "Common SQL patterns",
+            "version": 1,
+            "type": 0,
+            "logic": "UPDATE",
+            "enable": false,
+            "metadata" : {
+                "void" : "void"
+            }
+        },
+        {
+            "id": "2caf8025-1ab7-4444-b152-ba904fb7eec7",
+            "name": "Common SQL patterns",
+            "version": 1,
+            "type": 0,
+            "logic": "OR",
+            "enable": true,
+            "metadata" : {
+                "void" : "void"
+            }
+        }
+    ]
+}
+"""
+
 class TestRuleLoaded:
     def test_load_json_rules(self):
         file_obj = io.StringIO(rules_str)
@@ -46,5 +75,15 @@ class TestRuleLoaded:
 
         assert type(rule_list) == list
         assert type(rule_list[0]) == SQLRule
+        assert len(rule_list) == 2
         assert not_allowed == False
+        
+
+    def test_load_json_disable_rule(self):
+        file_obj = io.StringIO(rules_str_void)
+        rule_loader = InspectionRuleLoader(file_obj)
+
+        rule_list = rule_loader.load_rules()
+
+        assert len(rule_list) == 1
         

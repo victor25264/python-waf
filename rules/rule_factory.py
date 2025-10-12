@@ -5,6 +5,7 @@ import re
 class RuleType(Enum):
     SQLi_RULE = 0
     XSS_RULE = 1
+    NON_RULE = -1
 
 class SQLRuleDictValidator():
     @staticmethod
@@ -22,6 +23,7 @@ class SQLRuleDictValidator():
         missing = REQUIRED_KEYS - data.keys()
         if missing:
             raise KeyError(f"Missing keys: {missing}")
+        return True
 
 class RuleFactory:
     @staticmethod
@@ -50,8 +52,8 @@ class RuleFactory:
             case RuleType.XSS_RULE:
                 raise NotImplementedError
             case _:
-                print(str(RuleType.SQLi_RULE.value))
-                return
+                raise ValueError
+            
     @staticmethod    
     def __create_sql_rule(rule:dict):
         """Creates a `SQLRule` instance from a validated configuration dictionary.
@@ -66,14 +68,14 @@ class RuleFactory:
         Returns:
             SQLRule: A new instance of `SQLRule`.
         """
-        SQLRuleDictValidator.validate(rule)
+        if SQLRuleDictValidator.validate(rule):
 
-        id = rule.get("id")
-        name = rule.get("name")
-        version = rule.get("version")
-        pattern_logic = rule.get("logic")
-        metadata = rule.get("metadata")
-        pattern = re.compile(pattern_logic)
+            id = rule.get("id")
+            name = rule.get("name")
+            version = rule.get("version")
+            pattern_logic = rule.get("logic")
+            metadata = rule.get("metadata")
+            pattern = re.compile(pattern_logic)
         
         return SQLRule(pattern, id, version, name)
 
