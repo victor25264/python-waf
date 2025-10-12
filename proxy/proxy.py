@@ -10,7 +10,7 @@ class ProxyServer:
     Class inspired from: https://medium.com/customorchestrator/simple-reverse-proxy-server-using-flask-936087ce0afb
     """
 
-    def __init__(self, waf_engine: WAFEngine, backend_url:str, logger: logging.Logger = None):
+    def __init__(self, waf_engine: WAFEngine, backend_url:str, logger: logging.Logger = None, service_token : str = ""):
         """
         Args:
             waf_engine (WAFEngine): An instance of the WAFEngine (business layer) to delegate
@@ -19,13 +19,28 @@ class ProxyServer:
                 this proxy protects.
             logger (logging.Logger, optional): A logger instance to record WAF decisions
                 and proxy events. Defaults to None.
+            service_token (str): A token used for communication between dasboard and proxy
+                Defaults to "".
         """
         self.app = Flask(__name__)
         self.waf_engine = waf_engine
         self.backend_url = backend_url
         self.logger = logger
+        self.service_token = service_token
+        self.app.route('/healthcheck', methods=['GET'])(self.__health_check)
         self.app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])(self.proxy)
         self.app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])(self.proxy)
+
+    def __health_check(self):
+        """
+        Handles the /healthcheck endpoint, returning a simple 200 OK only if accessed
+        from the allowed IP address. Otherwise, it returns 403 Forbidden.        
+        """
+        authorization = request.authorization
+        if authorization and authorization.type == "bearer" and authorization.token == self.service_token:
+            return Response("OK", status=200, mimetype='text/plain')
+        else:
+           return "Forbidden: Your request was blocked.", 403
 
     def proxy(self, path):
         """Handles incoming HTTP requests, inspects them with the WAF, and forwards or blocks.

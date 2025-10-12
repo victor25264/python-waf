@@ -1,13 +1,15 @@
 from typing import List
 from rules.inspection_rules import InspectionRule
 from rules.http_requests import HttpRequest
+from engine.waf_log import WafLogEntry
 import threading
 import concurrent.futures
 from functools import partial
 from datetime import datetime
 import threading
 
-DB_QUERY = "INSERT INTO attacks_stats (time, rule_id, rule_name, src_ip, req_path, req_method) VALUES (?, ?, ?, ?, ?, ?)"
+DB_TABLE = "attacks_stats"
+DB_QUERY = f"INSERT INTO {DB_TABLE} {WafLogEntry.get_all_attr_insert()} VALUES  {WafLogEntry.get_all_to_insert()}"
 
 class WAFEngine:
     def __init__(self, rules: List[InspectionRule], fail_open : bool =True, workers:int = None, db_connnection = None):
@@ -25,7 +27,10 @@ class WAFEngine:
         self.executor = concurrent.futures.ThreadPoolExecutor(max_workers=workers)
         
         self.db_connnection = db_connnection
-        self.db_cursor = db_connnection.cursor()
+        if self.db_connnection:
+            self.db_cursor = db_connnection.cursor()
+        else:
+            self.db_cursor = None
         self.db_lock = threading.Lock()
 
     def check_rule(self, rule, request, stop_event=None):
