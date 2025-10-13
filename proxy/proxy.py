@@ -28,8 +28,21 @@ class ProxyServer:
         self.logger = logger
         self.service_token = service_token
         self.app.route('/healthcheck', methods=['GET'])(self.__health_check)
+        self.app.route('/eventsByTime', methods=['GET'])(self.__get_events_by_time)
         self.app.route('/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])(self.proxy)
         self.app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'PUT', 'DELETE'])(self.proxy)
+
+
+    def __get_events_by_time(self):
+        query_params=dict(request.args)
+        authorization = request.authorization
+        if authorization and authorization.type == "bearer" and authorization.token == self.service_token:
+            start = query_params.get("start")
+            end = query_params.get("end")
+            events = self.waf_engine.waf_db.get_by_time(start, end)
+            return Response(str(events), status=200, mimetype='text/plain')
+        else:
+           return "Forbidden: Your request was blocked.", 403
 
     def __health_check(self):
         """

@@ -20,6 +20,7 @@ LISTEN_PORT = os.getenv("LISTEN_PORT")
 BACKEND_URL = os.getenv("BACKEND_URL")
 RULES = os.getenv("RULES")
 DB_STATS= os.getenv("DB_STATS")
+SECRET_DASHBOARD= os.getenv("SECRET_DASHBOARD")
 db_con = sqlite3.connect(DB_STATS, check_same_thread=False)
 
 def main():
@@ -29,7 +30,7 @@ def main():
 
     waf_db = WAFDB(db_con)
     engine = WAFEngine(rules, False, 4, waf_db)
-    proxy = ProxyServer(waf_engine=engine, backend_url=BACKEND_URL, logger=logger)
+    proxy = ProxyServer(waf_engine=engine, backend_url=BACKEND_URL, logger=logger, service_token=SECRET_DASHBOARD)
 
     proxy.run(port=LISTEN_PORT)
 

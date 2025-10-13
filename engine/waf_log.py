@@ -16,7 +16,7 @@ class WafLogEntry:
         """
         Returns a tuple of attribute values suitable for SQL INSERT columns.
         """
-        return (str(self.timestamp), self.rule_id, self.rule_name, self.src_ip, self.req_path, self.req_method)
+        return (self.timestamp, self.rule_id, self.rule_name, self.src_ip, self.req_path, self.req_method)
 
     @classmethod
     def get_all_attr_insert(cls):
@@ -36,3 +36,11 @@ class WafLogEntry:
         num_fields = len(fields(cls))
         placeholders = ", ".join(["?"] * num_fields)
         return f"({placeholders})"
+    
+    @classmethod
+    def get_timestamp_attr(cls):
+        """
+        Returns a string of placeholders suitable for SQL INSERT values,
+        dynamically based on the number of dataclass fields.
+        """
+        return "timestamp"

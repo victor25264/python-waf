@@ -9,9 +9,6 @@ from functools import partial
 from datetime import datetime
 import threading
 
-DB_TABLE = "attacks_stats"
-DB_QUERY = f"INSERT INTO {DB_TABLE} {WafLogEntry.get_all_attr_insert()} VALUES  {WafLogEntry.get_all_to_insert()}"
-
 class WAFEngine:
     def __init__(self, rules: List[InspectionRule], fail_open : bool =True, workers:int = None, waf_db:WAFDB = None):
         """
