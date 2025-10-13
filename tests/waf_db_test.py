@@ -16,12 +16,6 @@ class MockCursorInsert(MockCursor):
 
     def fetchall(self):
         return {}
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
-
     def close(self):
         pass
 
@@ -31,12 +25,7 @@ class MockCursorSelectNone(MockCursor):
     
     def fetchall(self):
         return {}
-    
-    def __enter__(self):
-        return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
     def close(self):
         pass
 
@@ -47,12 +36,6 @@ class MockCursorSelect(MockCursor):
     def fetchall(self):
         return [("a", "b", "c", "d", "e", "f")]
     
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
-
     def close(self):
         pass
 
