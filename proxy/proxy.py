@@ -3,6 +3,7 @@ from rules.http_requests import HttpRequest
 from flask import Flask, request, Response
 import requests
 import logging
+import json
 
 class ProxyServer:
     """A reverse proxy server that integrates with a Web Application Firewall (WAF) engine.
@@ -40,7 +41,7 @@ class ProxyServer:
             start = query_params.get("start")
             end = query_params.get("end")
             events = self.waf_engine.waf_db.get_by_time(start, end)
-            return Response(str(events), status=200, mimetype='text/plain')
+            return Response(json.dumps(events), status=200, mimetype='text/plain')
         else:
            return "Forbidden: Your request was blocked.", 403
 
